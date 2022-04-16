@@ -8,29 +8,36 @@
  */
 package chatPack;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class App {
-    PreparedStatement
+    Connection con;
+    Statement statement;
+    PreparedStatement preQuery;
+    ResultSet result;
+    String query;
     /**
      * This class is the backend of the UI experience
      *
      * @throws SQLException
      */
     App() throws SQLException {
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/chatApp", "mohamed",
+        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/chatApp", "mohamed",
                 "password");
+        statement = con.createStatement();
     }
 
     /**
      * Task for : Mohamed Walid
      * create new user account and check if it's already exists
      */
-    void newUser(/*Your parameters here */) {
-
+    void newUser(/*Your parameters here */) throws SQLException {
+        query = "select username, password from user";
+        preQuery = con.prepareStatement(query);
+        result = preQuery.executeQuery();
+        while (result.next()){
+            System.out.println(result.getString("username") + " " + result.getString("password"));
+        }
     }
 
     /**
