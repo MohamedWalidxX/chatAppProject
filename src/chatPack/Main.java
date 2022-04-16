@@ -8,6 +8,5 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
         App app = new App();
-        app.newUser();
     }
 }

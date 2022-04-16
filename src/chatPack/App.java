@@ -32,13 +32,6 @@ public class App {
      * create new user account and check if it's already exists
      */
     void newUser(/*Your parameters here */) throws SQLException {
-        query = "select username, password from user where";
-        preQuery = con.prepareStatement(query);
-        result = preQuery.executeQuery();
-        while (result.next()){
-            String s = result.getString("username");
-            System.out.println(result.getString("username") + " " + result.getString("password"));
-        }
     }
 
     /**
