@@ -44,6 +44,7 @@ public class App {
     /**
      * Task For : Mohamed Walid
      * check if the data that user has entered is valid or exists
+     * (username, correct password, never exist phoneNumber while registering etc.)
      * the function will return true if it exists
      * false otherwise
      */
