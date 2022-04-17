@@ -78,14 +78,14 @@ public class App {
         // check every attribute if it exists or not in the database by count the number of elements that matches
         //  the user input and return a value for the caller function to decide
 
-        //check chosen username
+        //check  username if it exists by count function as if it was zero then it does not exist otherwise it exists
         query = "select count(username) from user where username = ?";
         preQuery = con.prepareStatement(query);
         preQuery.setString(1, user.getUsername());
         if (countChecker() == 1)
             return 1;
 
-        //check phoneNumber
+        //check phoneNumber same as above
         query = "select count(phoneNumber) from user where phoneNumber = ?";
         preQuery = con.prepareStatement(query);
         preQuery.setString(1, user.getPhoneNumber());
