@@ -26,12 +26,25 @@ public class App {
                 "password");
         statement = con.createStatement();
     }
-
     /**
      * Task for : Mohamed Walid
      * create new user account and check if it's already exists
      */
-    void newUser(/*Your parameters here */) throws SQLException {
+    void newUser(User user) throws SQLException {
+        int isValidOp = userDataValidation(user);
+        if (isValidOp == 0){
+            query = "insert into user (username, password, phoneNumber) values (?,?,?)";
+            preQuery = con.prepareStatement(query);
+            preQuery.setString(1, user.getUsername());
+            preQuery.setString(2, user.getPassword());
+            preQuery.setString(3, user.getPhoneNumber());
+            preQuery.executeUpdate();
+            System.out.println("registration process is done.");
+        }
+        else if (isValidOp == 1)
+            System.out.println("Username already exists.");
+        else if (isValidOp == 2)
+            System.out.println("Phone number already exists.");
     }
 
     /**
@@ -43,18 +56,45 @@ public class App {
     }
 
     /**
-     * Task For : Mohamed Walid
-     * check if the data that user has entered is valid or exists
-     * (username, correct password, never exist phoneNumber while registering etc.)
-     * the function will return true if it exists
-     * false otherwise
+     * Task for : Mohamed Walid , a sub task from userDataValidation function to remove duplicate code
+     * @return
+     * @throws SQLException
      */
-    boolean userDataValidation(/*Your parameters here */) {
+    int countChecker() throws SQLException {
+        result = preQuery.executeQuery();
+        result.next();
+        return result.getInt(1);
+    }
+    /**
+     * Task For : Mohamed Walid
+     * check if the data user has entered is valid for login or exists for registration process
+     * e.g.(username, correct password, never exist phoneNumber while registering etc.)
+     * the function will return a nonZero number which means that we find a data matches the user input
+     * or return zero otherwise,,,
+     *
+     * OPTIMIZATION : MAKE one function that takes the column name you want to check and return
+     */
+    int userDataValidation(User user) throws SQLException {
+        // check every attribute if it exists or not in the database by count the number of elements that matches
+        //  the user input and return a value for the caller function to decide
 
-        return false;
+        //check chosen username
+        query = "select count(username) from user where username = ?";
+        preQuery = con.prepareStatement(query);
+        preQuery.setString(1, user.getUsername());
+        if (countChecker() == 1)
+            return 1;
+
+        //check phoneNumber
+        query = "select count(phoneNumber) from user where phoneNumber = ?";
+        preQuery = con.prepareStatement(query);
+        preQuery.setString(1, user.getPhoneNumber());
+        if (countChecker() == 1)
+            return 2;
+        return 0;
     }
 
-    /**
+    /** Task for: bavley,,,
      * add new connection to the user list
      */
     void addConnection(){

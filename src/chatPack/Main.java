@@ -8,5 +8,7 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
         App app = new App();
+        User u = new User(1,"Mezo", "0110110123", "Momom", null, true);
+        app.newUser(u);
     }
 }
