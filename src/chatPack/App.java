@@ -31,6 +31,8 @@ public class App {
      * create new user account and check if it's already exists
      */
     void newUser(User user) throws SQLException {
+        // call the userValidation function to validate the user data whether it exists or no
+        // and save the return value
         int isValidOp = userDataValidation(user);
         if (isValidOp == 0){
             query = "insert into user (username, password, phoneNumber) values (?,?,?)";
@@ -192,7 +194,7 @@ public class App {
      * remove yourself or any user from the chat group
      */
     void removeUserFromGroup(/*Your parameters here */) {
-
+        
     }
 
     /**

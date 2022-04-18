@@ -30,7 +30,7 @@ CREATE TABLE `user` (
   `profileDesc` varchar(350) DEFAULT 'Hey there !! , i''aa using chatApp :)',
   `password` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (10,'MohamedWalid','01014891962',1,'Hey there !! , i\'aa using chatApp :)','Abcd'),(11,'MohamedAhmed','0112277646',0,'Software engineer at FCIS ASU','axS21'),(12,'Mohamed Yehia','0104431246',1,'Software engineer at FCIS ASU','BBCAB123@'),(13,'Mohamed Mamdouh','0154423156',1,'Hello, America!!','ABCD4412'),(14,'Mahmoud Sobhy','00272569032',1,'y3mal lda kalam fe el7op','BOBBOB11'),(15,'Yasser Saber','0151411779',1,'Work for facebook ','ReeeeReee123');
+INSERT INTO `user` VALUES (10,'MohamedWalid','01014891962',1,'Hey there !! , i\'aa using chatApp :)','Abcd'),(11,'MohamedAhmed','0112277646',0,'Software engineer at FCIS ASU','axS21'),(12,'Mohamed Yehia','0104431246',1,'Software engineer at FCIS ASU','BBCAB123@'),(13,'Mohamed Mamdouh','0154423156',1,'Hello, America!!','ABCD4412'),(14,'Mahmoud Sobhy','00272569032',1,'y3mal lda kalam fe el7op','BOBBOB11'),(15,'Yasser Saber','0151411779',1,'Work for facebook ','ReeeeReee123'),(16,'testing','01101010302',1,'Hey there !! , i\'aa using chatApp :)','Testpassword'),(17,'Hello','010101',1,'Hey there !! , i\'aa using chatApp :)','LOL'),(18,'Mezo','0110110123',1,'Hey there !! , i\'aa using chatApp :)','Momom');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-16  9:42:39
+-- Dump completed on 2022-04-18  7:16:29
