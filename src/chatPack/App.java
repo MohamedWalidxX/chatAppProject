@@ -198,7 +198,7 @@ public class App {
         preQuery = con.prepareStatement(query);
         preQuery.setInt(1, user.getId());
         preQuery.setInt(2, user.getCurrentChatId());
-        result = preQuery.executeQuery();
+        preQuery.executeUpdate();
         System.out.println("User han been deleted");
     }
 
@@ -238,4 +238,3 @@ public class App {
 
     }
 }
-//abc

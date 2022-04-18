@@ -8,7 +8,8 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
         App app = new App();
-        User u = new User(1,"Mezo", "0110110123", "Momom", null, true);
-        app.newUser(u);
+        User u= new User(11, "MohamedAhmed", "01014891962", "abcd", "hello", true);
+        u.setCurrentChatId(2);
+        app.removeUserFromGroup(u);
     }
 }
