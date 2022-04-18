@@ -26,6 +26,7 @@ CREATE TABLE `userjoinchat` (
   `chatId` int NOT NULL,
   `userId` int NOT NULL,
   `lastChatOpen` datetime DEFAULT NULL,
+  `isBlocked` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`chatId`,`userId`),
   KEY `fk_chatId_userId2` (`userId`),
   CONSTRAINT `fk_chatId_userId1` FOREIGN KEY (`chatId`) REFERENCES `chatroom` (`id`),
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-18  7:16:29
+-- Dump completed on 2022-04-18  7:24:43
