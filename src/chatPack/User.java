@@ -4,7 +4,7 @@ public class User {
     private final int id;
     private String username, phoneNumber, password, profileDesc;
     private boolean profileVisibility;
-
+    private int currentChatId;
     public User(int id, String username, String phoneNumber, String password, String profileDesc, boolean profileVisiblilty) {
         this.id = id;
         this.username = username;
@@ -34,8 +34,12 @@ public class User {
         return profileDesc;
     }
 
-    public boolean isProfileVisiblilty() {
+    public boolean isProfileVisibility() {
         return profileVisibility;
+    }
+
+    public int getCurrentChatId() {
+        return currentChatId;
     }
 
     public void setUsername(String username) {
@@ -54,7 +58,11 @@ public class User {
         this.profileDesc = profileDesc;
     }
 
-    public void setProfileVisiblilty(boolean profileVisiblilty) {
-        this.profileVisibility = profileVisiblilty;
+    public void setProfileVisibility(boolean profileVisibility) {
+        this.profileVisibility = profileVisibility;
+    }
+
+    public void setCurrentChatId(int currentChatId) {
+        this.currentChatId = currentChatId;
     }
 }

@@ -193,8 +193,13 @@ public class App {
      * Task for : Mohamed Walid
      * remove yourself or any user from the chat group
      */
-    void removeUserFromGroup(/*Your parameters here */) {
-        
+    void removeUserFromGroup(User user) throws SQLException{
+        query = "delete from userJoinChat where userId = ? and chatId = ?";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1, user.getId());
+        preQuery.setInt(2, user.getCurrentChatId());
+        result = preQuery.executeQuery();
+        System.out.println("User han been deleted");
     }
 
     /**
