@@ -1,10 +1,10 @@
 /**
  * IMPORTANT RULES FOR DEVELOPER :
- *      1. you have the right to change your assigned function components eg (inputs - return type - function body)
- *      as long as it reaches the goal.
- *      2. you don't have the right to change your friend function components directly you have to ask him to change it by himself.
- *      3. you have to be careful when you use SQL statement that the data still
- *      consistent eg (check the select syntax in the mysql ide first then copy it to INTELLIJ)
+ * 1. you have the right to change your assigned function components eg (inputs - return type - function body)
+ * as long as it reaches the goal.
+ * 2. you don't have the right to change your friend function components directly you have to ask him to change it by himself.
+ * 3. you have to be careful when you use SQL statement that the data still
+ * consistent eg (check the select syntax in the mysql ide first then copy it to INTELLIJ)
  */
 package chatPack;
 
@@ -16,16 +16,18 @@ public class App {
     PreparedStatement preQuery;
     ResultSet result;
     String query;
+
     /**
      * This class is the backend of the UI experience
      *
      * @throws SQLException
      */
     App() throws SQLException {
-        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/chatApp", "mohamed",
+        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ChatApp", "mohamed",
                 "password");
         statement = con.createStatement();
     }
+
     /**
      * Task for : Mohamed Walid
      * create new user account and check if it's already exists
@@ -34,7 +36,7 @@ public class App {
         // call the userValidation function to validate the user data whether it exists or no
         // and save the return value
         int isValidOp = userDataValidation(user);
-        if (isValidOp == 0){
+        if (isValidOp == 0) {
             query = "insert into user (username, password, phoneNumber) values (?,?,?)";
             preQuery = con.prepareStatement(query);
             preQuery.setString(1, user.getUsername());
@@ -42,8 +44,7 @@ public class App {
             preQuery.setString(3, user.getPhoneNumber());
             preQuery.executeUpdate();
             System.out.println("registration process is done.");
-        }
-        else if (isValidOp == 1)
+        } else if (isValidOp == 1)
             System.out.println("Username already exists.");
         else if (isValidOp == 2)
             System.out.println("Phone number already exists.");
@@ -59,6 +60,7 @@ public class App {
 
     /**
      * Task for : Mohamed Walid , a sub task from userDataValidation function to remove duplicate code
+     *
      * @return
      * @throws SQLException
      */
@@ -67,13 +69,14 @@ public class App {
         result.next();
         return result.getInt(1);
     }
+
     /**
      * Task For : Mohamed Walid
      * check if the data user has entered is valid for login or exists for registration process
      * e.g.(username, correct password, never exist phoneNumber while registering etc.)
      * the function will return a nonZero number which means that we find a data matches the user input
      * or return zero otherwise,,,
-     *
+     * <p>
      * OPTIMIZATION : MAKE one function that takes the column name you want to check and return
      */
     int userDataValidation(User user) throws SQLException {
@@ -96,12 +99,31 @@ public class App {
         return 0;
     }
 
-    /** Task for: bavley,,,
+    /**
+     * Task for: bavley,,,
      * add new connection to the user list
      */
-    void addConnection(){
+    void addConnection() {
 
     }
+
+
+    boolean searchForConnection(int currentUserId, int friendId) throws SQLException {
+        query = "select count(*) from userconnection where userid = ? and friendid = ?";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1, currentUserId);
+        preQuery.setInt(2, friendId);
+        result = preQuery.executeQuery();
+        result.next();
+        if (result.getInt(1) == 0) {
+            System.out.println("not found!");
+            return false;
+        } else {
+            System.out.println("Found!");
+            return true;
+        }
+    }
+
     /**
      * Task for : Mohamed Yehia && bavley
      * checkGarbage functionality is to search for any data that it's existence is related to time or date
@@ -185,7 +207,13 @@ public class App {
      * Task for : Mohamed Yehia
      * the user choose a contact friend and add him to the opened chat room
      */
-    void addUserToGroup(/*Your parameters here */) {
+    void addUserToGroup(User user) throws SQLException {
+        query = "insert into userJoinChat(userId,chatId) values(?,?);";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1, user.getId());
+        preQuery.setInt(2, user.getCurrentChatId());
+        preQuery.executeUpdate();
+        System.out.println("User han been added");
 
     }
 
@@ -193,7 +221,7 @@ public class App {
      * Task for : Mohamed Walid
      * remove yourself or any user from the chat group
      */
-    void removeUserFromGroup(User user) throws SQLException{
+    void removeUserFromGroup(User user) throws SQLException {
         query = "delete from userJoinChat where userId = ? and chatId = ?";
         preQuery = con.prepareStatement(query);
         preQuery.setInt(1, user.getId());
@@ -204,6 +232,7 @@ public class App {
 
     /**
      * Task for : Mohamed Mamdouh   remove a user
+     * EDIT : add blocked user to database contact mohamed walid
      */
     void blockUser(/*Your parameters here */) {
 
@@ -238,3 +267,6 @@ public class App {
 
     }
 }
+/**
+ *
+ */
