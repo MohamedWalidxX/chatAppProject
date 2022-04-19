@@ -185,7 +185,13 @@ public class App {
      * Task for : Mohamed Yehia
      * the user choose a contact friend and add him to the opened chat room
      */
-    void addUserToGroup(/*Your parameters here */) {
+    void addUserToGroup(User user)throws SQLException{ 
+        query = "insert into userJoinChat(userId,chatId) values(?,?);";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1, user.getId());
+        preQuery.setInt(2, user.getCurrentChatId());
+        preQuery.executeUpdate();
+        System.out.println("User han been added");
 
     }
 
