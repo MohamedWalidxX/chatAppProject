@@ -146,7 +146,31 @@ public class App {
      * Task for : Mohamed Walid && Mohamed Yehia
      * create a group of members with at least 3 initial members in it
      */
-    void createGroup(/*Your parameters here */) {
+    int addHelper(String name_group)throws SQLException {
+        query="(select id from chatroom where name=name_group)";
+        preQuery = con.prepareStatement(query);
+        result=preQuery.executeQuery();
+      return result.getInt("id");
+
+
+
+    }
+    void createGroup(String groupName,User user1,User user2,User mainUser)throws SQLException {
+        //create group
+        query="insert into chatroom(name) values(?)";
+        preQuery = con.prepareStatement(query);
+        preQuery.setString(1,groupName);
+        preQuery.executeUpdate();
+        System.out.println(String.format("you created the group of %s",groupName));
+        //add at least 2 user for new group
+        query="insert into userjoinchat values(addHelper(groupName),?,now(),default),(addHelper(groupName),?,now(),default),(addHelper(groupName),?,now(),default)";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1,user1.getId());
+        preQuery.setInt(2,user2.getId());
+        preQuery.setInt(3,mainUser.getId());
+        preQuery.executeUpdate();
+        System.out.println(String.format("you added %s",user1.getUsername()));
+        System.out.println(String.format("you added %s",user2.getUsername()));
 
     }
 
