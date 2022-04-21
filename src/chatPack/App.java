@@ -263,7 +263,14 @@ public class App {
      * Task for : Mohamed Walid && Mohamed Yehia
      * For a specific chat room search for a message
      */
-    void searchForMessageHint(/*Your parameters here */) {
+      void searchForMessageHint(String msg)throws SQLException {
+        query="select messageText from message where messageText like '%?%'";
+        preQuery=con.prepareStatement(query);
+        preQuery.setString(1,msg);
+        result=preQuery.executeQuery();
+        while(result.next()){
+            System.out.println(result.getString("messageText"));
+        }
 
     }
 }
