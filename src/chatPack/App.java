@@ -9,6 +9,9 @@
 package chatPack;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 public class App {
     Connection con;
@@ -16,6 +19,8 @@ public class App {
     PreparedStatement preQuery;
     ResultSet result;
     String query;
+    Enumeration<Integer>e;
+
 
     /**
      * This class is the backend of the UI experience
@@ -125,7 +130,7 @@ public class App {
     }
 
     /**
-     * Task for : Mohamed Yehia && bavley
+     * Task for : Mohamed Walid
      * checkGarbage functionality is to search for any data that it's existence is related to time or date
      * eg (all user stories) and delete it from database before the user open his UI
      */
@@ -134,7 +139,7 @@ public class App {
     }
 
     /**
-     * Task for : Mohamed Mamdouh && Sobhy.
+     * Task for : Mohamed Yehia
      * For each user check his connection list and expand all his connections as a 2 members chat list
      * and for each chat the name of it and the last message was sent
      */
@@ -160,7 +165,7 @@ public class App {
     }
 
     /**
-     * Task for : Mohamed Walid && Mohamed Mamdouh
+     * Task for : Mohamed Walid
      * for the opened chat let him show the name of the group first then each group user
      * with his last chat opened date
      * Corner case: if the chat was private chat between only two persons then for each show the friend name if he was in his connection lsit
@@ -171,7 +176,7 @@ public class App {
     }
 
     /**
-     * Task for : Mohamed Walid && Mohamed Yehia && Bavley
+     * Task for : Mohamed Walid
      * after opening a chat expand all it's messages with its time
      * CORNER CASE : you have to split each day messages
      */
@@ -180,7 +185,7 @@ public class App {
     }
 
     /**
-     * Task for : Mohamed Mamdouh && bavley
+     * Task for : Mohamed Yehia
      * send message to the current opened chat
      */
     void sendMessage(/* Your parameters here */) {
@@ -188,7 +193,7 @@ public class App {
     }
 
     /**
-     * Task for : Mohamed Walid && Sobhy
+     * Task for : Mohamed Walid
      * UNDO your sent messages
      */
     void deleteMessage(/*Your parameters here */) {
@@ -196,7 +201,7 @@ public class App {
     }
 
     /**
-     * Task for : Mohamed Mamdouh && Sobhy
+     * Task for : Mohamed Walid
      * close the current opened chat and go back to chat list
      */
     void closeChat(/*Your parameters here */) {
@@ -231,7 +236,7 @@ public class App {
     }
 
     /**
-     * Task for : Mohamed Mamdouh   remove a user
+     * Task for : Mohamed Yehia
      * EDIT : add blocked user to database contact mohamed walid
      */
     void blockUser(/*Your parameters here */) {
@@ -239,31 +244,70 @@ public class App {
     }
 
     /**
-     * Task for : Mohamed Mamdouh && bavley
+     * Task for : Mohamed Yehia using hash table
      * in the chat list you search for message by text keyword WITHOUT HINTS
      */
     void searchForMessage(/*Your parameters here */) {
     }
 
     /**
-     * Task for : Mohamed Walid && bavley
+     * Task for : Mohamed Walid... using hash table
      */
     void searchForConnectionByNumber() {
 
     }
 
     /**
-     * Task for : Sobhy
+     * Task for : Mohamed Yehia ,, using hash table
      */
     void searchForConnectionByName() {
 
     }
 
     /**
-     * Task for : Mohamed Walid && Mohamed Yehia
-     * For a specific chat room search for a message
+     * return username from user id
+     * @param id
+     * @return
      */
-    void searchForMessageHint(/*Your parameters here */) {
-
+    String returnUsername(int id) throws SQLException{
+        String query = "select username from user where id = ?";
+        PreparedStatement preQuery = con.prepareStatement(query);
+        preQuery.setInt(1,id);
+        ResultSet result = preQuery.executeQuery();
+        result.next();
+        return result.getString(1);
+    }
+    /**
+     * Task for : Mohamed Walid
+     * given a specific chat room search for a message using hash table
+     */
+    void searchForMessageHint(int currentChatRoomId, String text) throws SQLException {
+        query = "select * from message where chatId = ? ";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1, currentChatRoomId);
+        result = preQuery.executeQuery();
+        //Hashtable to map every message with its id
+        Hashtable<Integer, Message> findStr = new Hashtable<Integer, Message>();
+        while (result.next()) {
+            // insert into hashtable
+            findStr.put(result.getInt(1), new Message(result.getInt(1), result.getInt(2), result.getInt(3), result.getString(4),
+                    result.getString(5), result.getString(6), result.getBoolean(7)));
+        }
+        // to iterate over the hashmap we need to save all the keys in  Enumeration object
+        Enumeration<Integer> e = findStr.keys();
+        ArrayList<Integer> keySave = new ArrayList<Integer>();
+        while (e.hasMoreElements())
+            keySave.add(e.nextElement());
+        //the enumeration gives a reversed order of your hashmap key
+        // you have to reverse it again as the order matters in printing
+        for (int i = keySave.size() - 1; i >= 0; i--) {
+            // retrieve the value of specific hashmap key
+            Message finalMessage = findStr.get(keySave.get(i));
+            //if the user text matches ours print the full message with its data
+            if (finalMessage.getMessageText().contains(text)) {
+                System.out.println(returnUsername(finalMessage.getSenderId()) + "\n" + finalMessage.getMessageText() + "\n" +
+                        finalMessage.getDate() + " | " + finalMessage.getTime() + "\n\n");
+            }
+        }
     }
 }
