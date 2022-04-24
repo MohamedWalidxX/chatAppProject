@@ -181,15 +181,24 @@ public class App {
      * CORNER CASE : you have to split each day messages
      */
     void expandMessages(int chatId, int currentUserId) throws SQLException{
+        // make a query to get all the messages of a specific chat from database with ascending order by date first then time
         query = "select senderId, messageText, date, time from message where chatId = ? order by date asc, time asc";
+        //to make the pointer of resultSet go forward and backward in the dataSet we have to make this next line
         preQuery = con.prepareStatement(query,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         preQuery.setInt(1,chatId);
         result = preQuery.executeQuery();
+        System.out.println("____________________________________");
         while (result.next()){
+            //detect a cycle
             boolean innerLoopCheckInfinity = false;
-            String testConstDate = result.getString(4);
-            while (testConstDate.equals(result.getString(4))){
+            //take the first message date so that the message could be printed with ascending order of date
+            String testConstDate = result.getString(3);
+            //for all messages have the same date print them all
+            System.out.println("\t\t\t[[[" + testConstDate + "]]]\n\n");
+            while (testConstDate.equals(result.getString(3))){
                 innerLoopCheckInfinity = true;
+                // the UI experience said that your message will be printed on the left half of the screen
+                // and your friends will be on the right half
                 if (result.getInt(1) == currentUserId)
                     System.out.println(returnUsername(currentUserId) + "\n" + result.getString(2) + "\n[" + result.getString(4) + "]\n");
                 else
@@ -198,6 +207,7 @@ public class App {
                 if (!result.next())
                     break;
             }
+            System.out.println("____________________________________");
             // the previous inner while loop could make a cycle if it's condition was not true and the resultSet pointer will go back and forward
             //in the same data and check the condition
             if (innerLoopCheckInfinity)
