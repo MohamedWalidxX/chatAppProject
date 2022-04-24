@@ -247,20 +247,58 @@ public class App {
      * Task for : Mohamed Yehia using hash table
      * in the chat list you search for message by text keyword WITHOUT HINTS
      */
-    void searchForMessage(/*Your parameters here */) {
+    void searchForMessage(int userId, String text) throws SQLException{
+        query = "select chatId from userjoinchat where userId = ?";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1, userId);
+        result = preQuery.executeQuery();
+        while (result.next()){
+            searchForMessageHint(result.getInt(1), text);
+        }
+        System.out.println("\n\n");
+        searchForConnectionByName(userId, text);
+        searchForConnectionByNumber(userId, text);
     }
 
     /**
      * Task for : Mohamed Walid... using hash table
      */
-    void searchForConnectionByNumber() {
+    void searchForConnectionByNumber(int userId, String friendNumber) throws SQLException{
+        System.out.println("user search by number: \n\n");
+        query = "select * from userconnection where userId= ?";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1, userId);
+        result = preQuery.executeQuery();
+        Hashtable<Integer, User> findUser = new Hashtable<Integer, User>();
+        while (result.next()){
+            query = "select id, username, phoneNumber, password, profileDesc, profileVisibility from user where id = ?";
+            preQuery = con.prepareStatement(query);
+            preQuery.setInt(1, result.getInt(2));
+            ResultSet tmpResult = preQuery.executeQuery();
+            tmpResult.next();
+            findUser.put(result.getInt(1), new User(tmpResult.getInt(1), result.getString(3), tmpResult.getString(3), tmpResult.getString(4),
+                    tmpResult.getString(5), tmpResult.getBoolean(6)));
+        }
+        Enumeration<Integer> e = findUser.keys();
+        ArrayList<Integer> keySave = new ArrayList<Integer>();
+        while (e.hasMoreElements())
+            keySave.add(e.nextElement());
 
+        for (int i = keySave.size() - 1; i >= 0; i--) {
+            // retrieve the value of specific hashmap key
+            User friend = findUser.get(keySave.get(i));
+            //if the user text matches ours print the full message with its data
+            if (friend.getPhoneNumber().contains(friendNumber)) {
+                System.out.println(friend.getUsername() + "\n\n");
+            }
+        }
     }
 
     /**
      * Task for : Mohamed Walid
      */
     void searchForConnectionByName(int userId, String friendName) throws SQLException{
+        System.out.println("user search by name: \n\n");
         query = "select * from userconnection where userId= ?";
         preQuery = con.prepareStatement(query);
         preQuery.setInt(1, userId);
