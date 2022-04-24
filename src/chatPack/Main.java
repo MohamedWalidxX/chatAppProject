@@ -10,6 +10,10 @@ public class Main {
         App app = new App();
         User u= new User(12, "MohamedAhmed", "01014891962", "abcd", "hello", true);
         u.setCurrentChatId(3);
+<<<<<<< HEAD
         app.searchForMessageHint(u.getCurrentChatId(), "VIETNAAAAAM");
+=======
+        app.addConnection("BO2loz", 15, 16);
+>>>>>>> 4048c8b (Hashing-2)
     }
 }
