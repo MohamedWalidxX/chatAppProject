@@ -9,6 +9,6 @@ public class Main {
     public static void main(String[] args) throws SQLException {
         App app = new App();
         User u = new User(12, "MohamedAhmed", "01014891962", "abcd", "hello", true);
-        app.searchForMessage(11, "B");
+        app.expandMessages(4, 10);
     }
 }

@@ -65,4 +65,5 @@ public class User {
     public void setCurrentChatId(int currentChatId) {
         this.currentChatId = currentChatId;
     }
+
 }

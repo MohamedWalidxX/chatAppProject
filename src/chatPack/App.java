@@ -30,7 +30,7 @@ public class App {
     App() throws SQLException {
         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ChatApp", "mohamed",
                 "password");
-        statement = con.createStatement();
+        Statement st = con.createStatement();
     }
 
     /**
@@ -160,8 +160,8 @@ public class App {
      * select a specific chat room from user chat list and open it with all its information and all messages
      * don't forget to save the current opened chat room in the user class
      */
-    void openChat(/*Your parameters here */) {
-
+    void openChat(User u, int chatId) {
+        u.setCurrentChatId(chatId);
     }
 
     /**
@@ -180,8 +180,29 @@ public class App {
      * after opening a chat expand all it's messages with its time
      * CORNER CASE : you have to split each day messages
      */
-    void expandMessages(/*Your parameters here */) {
-
+    void expandMessages(int chatId, int currentUserId) throws SQLException{
+        query = "select senderId, messageText, date, time from message where chatId = ? order by date asc, time asc";
+        preQuery = con.prepareStatement(query,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        preQuery.setInt(1,chatId);
+        result = preQuery.executeQuery();
+        while (result.next()){
+            boolean innerLoopCheckInfinity = false;
+            String testConstDate = result.getString(4);
+            while (testConstDate.equals(result.getString(4))){
+                innerLoopCheckInfinity = true;
+                if (result.getInt(1) == currentUserId)
+                    System.out.println(returnUsername(currentUserId) + "\n" + result.getString(2) + "\n[" + result.getString(4) + "]\n");
+                else
+                    System.out.println("\t\t\t\t\t" + returnUsername(result.getInt(1)) + "\n\t\t\t\t\t" + result.getString(2) + "\n\t\t\t\t\t["
+                    + result.getString(4) + "]\n");
+                if (!result.next())
+                    break;
+            }
+            // the previous inner while loop could make a cycle if it's condition was not true and the resultSet pointer will go back and forward
+            //in the same data and check the condition
+            if (innerLoopCheckInfinity)
+                result.previous();
+        }
     }
 
     /**
@@ -204,8 +225,8 @@ public class App {
      * Task for : Mohamed Walid
      * close the current opened chat and go back to chat list
      */
-    void closeChat(/*Your parameters here */) {
-
+    void closeChat(User u) {
+        u.setCurrentChatId(-1);
     }
 
     /**
