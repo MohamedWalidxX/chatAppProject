@@ -19,7 +19,7 @@ public class App {
     PreparedStatement preQuery;
     ResultSet result;
     String query;
-    Enumeration<Integer>e;
+    Enumeration<Integer> e;
 
 
     /**
@@ -112,23 +112,6 @@ public class App {
 
     }
 
-
-    boolean searchForConnection(int currentUserId, int friendId) throws SQLException {
-        query = "select count(*) from userconnection where userid = ? and friendid = ?";
-        preQuery = con.prepareStatement(query);
-        preQuery.setInt(1, currentUserId);
-        preQuery.setInt(2, friendId);
-        result = preQuery.executeQuery();
-        result.next();
-        if (result.getInt(1) == 0) {
-            System.out.println("not found!");
-            return false;
-        } else {
-            System.out.println("Found!");
-            return true;
-        }
-    }
-
     /**
      * Task for : Mohamed Walid
      * checkGarbage functionality is to search for any data that it's existence is related to time or date
@@ -151,8 +134,7 @@ public class App {
      * Task for : Mohamed Walid && Mohamed Yehia
      * create a group of members with at least 3 initial members in it
      */
-    void createGroup(/*Your parameters here */) {
-
+    void createGroup() throws SQLException {
     }
 
     /**
@@ -164,6 +146,17 @@ public class App {
         u.setCurrentChatId(chatId);
     }
 
+    //return User object with its userId
+    User returnUser(int userId) throws SQLException {
+        query = "select username, password, phoneNumber, profileDesc, profileVisibility from user where id = ?";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1, userId);
+        ResultSet tmp = preQuery.executeQuery();
+        tmp.next();
+        return new User(userId, tmp.getString(1), tmp.getString(2), tmp.getString(3), tmp.getString(4), tmp.getBoolean(5));
+    }
+
+
     /**
      * Task for : Mohamed Walid
      * for the opened chat let him show the name of the group first then each group user
@@ -171,31 +164,83 @@ public class App {
      * Corner case: if the chat was private chat between only two persons then for each show the friend name if he was in his connection lsit
      * or show his number otherwise
      */
-    void showChatInfo(/*Your parameters here */) {
+    void showChatInfo(int chatId, int currentUserId) throws SQLException {
+        query = "select * from chatRoom where id = ?";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1, chatId);
+        result = preQuery.executeQuery();
+        result.next();
+        ChatRoom chat = new ChatRoom(chatId, result.getString(2));
+        query = "select userId, chatId, lastChatOpen from userJoinChat where chatId = ?";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1, chatId);
+        result = preQuery.executeQuery();
+        User u;
+        System.out.println("\t\t" + chat.getName() + "\n___________________________"+  "\nGroup Members: \n" +
+                "___________________________");
+        while (result.next()) {
+            query = "select friendName from userConnection where userId = ? and friendId = ?";
+            preQuery = con.prepareStatement(query);
+            if (currentUserId == result.getInt(1)) {
+                chat.getUserList().add(returnUser(result.getInt(1)));
+                System.out.println("YOU " + result.getString(3) + "\n");
+                continue;
+            }
+            preQuery.setInt(1, currentUserId);
+            preQuery.setInt(2, result.getInt(1));
+            ResultSet userConnectionRelation = preQuery.executeQuery();
+            //Handle the null
+            String lastChatOpen = result.getString(3);
+            if (userConnectionRelation.next()) {
+                u = returnUser(result.getInt(1));
+                if (userConnectionRelation.getString(1) != null)
+                    u.setUsername(userConnectionRelation.getString(1));
+                chat.getUserList().add(u);
+                if (lastChatOpen == null) {
+                    System.out.println( u.getUsername() + "\n" + "Not opened Yet" + "\n");
 
-    }
+                }
+                else
+                    System.out.println( u.getUsername() + "\n" + result.getString(3) + "\n");
+            }
+            else {
+                u = returnUser(result.getInt(1));
+                chat.getUserList().add(u);
+                if (lastChatOpen == null) {
+                    System.out.println(u.getUsername() + "\n" + "Not opened Yet" + "\n");
+
+                    }
+                else
+                    System.out.println(u.getUsername() + "\n" + result.getString(3) + "\n");
+
+                }
+
+            }
+        System.out.println("___________________________");
+        }
 
     /**
      * Task for : Mohamed Walid
      * after opening a chat expand all it's messages with its time
      * CORNER CASE : you have to split each day messages
      */
-    void expandMessages(int chatId, int currentUserId) throws SQLException{
+    void expandMessages(int chatId, int currentUserId) throws SQLException {
+        this.showChatInfo(chatId, currentUserId);
         // make a query to get all the messages of a specific chat from database with ascending order by date first then time
         query = "select senderId, messageText, date, time from message where chatId = ? order by date asc, time asc";
         //to make the pointer of resultSet go forward and backward in the dataSet we have to make this next line
-        preQuery = con.prepareStatement(query,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        preQuery.setInt(1,chatId);
+        preQuery = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        preQuery.setInt(1, chatId);
         result = preQuery.executeQuery();
         System.out.println("____________________________________");
-        while (result.next()){
+        while (result.next()) {
             //detect a cycle
             boolean innerLoopCheckInfinity = false;
             //take the first message date so that the message could be printed with ascending order of date
             String testConstDate = result.getString(3);
             //for all messages have the same date print them all
             System.out.println("\t\t\t[[[" + testConstDate + "]]]\n\n");
-            while (testConstDate.equals(result.getString(3))){
+            while (testConstDate.equals(result.getString(3))) {
                 innerLoopCheckInfinity = true;
                 // the UI experience said that your message will be printed on the left half of the screen
                 // and your friends will be on the right half
@@ -203,7 +248,7 @@ public class App {
                     System.out.println(returnUsername(currentUserId) + "\n" + result.getString(2) + "\n[" + result.getString(4) + "]\n");
                 else
                     System.out.println("\t\t\t\t\t" + returnUsername(result.getInt(1)) + "\n\t\t\t\t\t" + result.getString(2) + "\n\t\t\t\t\t["
-                    + result.getString(4) + "]\n");
+                            + result.getString(4) + "]\n");
                 if (!result.next())
                     break;
             }
@@ -278,12 +323,12 @@ public class App {
      * Task for : Mohamed Yehia using hash table
      * in the chat list you search for message by text keyword WITHOUT HINTS
      */
-    void searchForMessage(int userId, String text) throws SQLException{
+    void searchForMessage(int userId, String text) throws SQLException {
         query = "select chatId from userjoinchat where userId = ?";
         preQuery = con.prepareStatement(query);
         preQuery.setInt(1, userId);
         result = preQuery.executeQuery();
-        while (result.next()){
+        while (result.next()) {
             searchForMessageHint(result.getInt(1), text);
         }
         System.out.println("\n\n");
@@ -294,14 +339,14 @@ public class App {
     /**
      * Task for : Mohamed Walid... using hash table
      */
-    void searchForConnectionByNumber(int userId, String friendNumber) throws SQLException{
+    void searchForConnectionByNumber(int userId, String friendNumber) throws SQLException {
         System.out.println("user search by number: \n\n");
         query = "select * from userconnection where userId= ?";
         preQuery = con.prepareStatement(query);
         preQuery.setInt(1, userId);
         result = preQuery.executeQuery();
         Hashtable<Integer, User> findUser = new Hashtable<Integer, User>();
-        while (result.next()){
+        while (result.next()) {
             query = "select id, username, phoneNumber, password, profileDesc, profileVisibility from user where id = ?";
             preQuery = con.prepareStatement(query);
             preQuery.setInt(1, result.getInt(2));
@@ -328,14 +373,14 @@ public class App {
     /**
      * Task for : Mohamed Walid
      */
-    void searchForConnectionByName(int userId, String friendName) throws SQLException{
+    void searchForConnectionByName(int userId, String friendName) throws SQLException {
         System.out.println("user search by name: \n\n");
         query = "select * from userconnection where userId= ?";
         preQuery = con.prepareStatement(query);
         preQuery.setInt(1, userId);
         result = preQuery.executeQuery();
         Hashtable<Integer, User> findUser = new Hashtable<Integer, User>();
-        while (result.next()){
+        while (result.next()) {
             query = "select id, username, phoneNumber, password, profileDesc, profileVisibility from user where id = ?";
             preQuery = con.prepareStatement(query);
             preQuery.setInt(1, result.getInt(2));
@@ -361,17 +406,19 @@ public class App {
 
     /**
      * return username from user id
+     *
      * @param id
      * @return
      */
-    String returnUsername(int id) throws SQLException{
+    String returnUsername(int id) throws SQLException {
         String query = "select username from user where id = ?";
         PreparedStatement preQuery = con.prepareStatement(query);
-        preQuery.setInt(1,id);
+        preQuery.setInt(1, id);
         ResultSet result = preQuery.executeQuery();
         result.next();
         return result.getString(1);
     }
+
     /**
      * Task for : Mohamed Walid
      * given a specific chat room search for a message using hash table
