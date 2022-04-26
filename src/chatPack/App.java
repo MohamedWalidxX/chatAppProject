@@ -264,7 +264,25 @@ public class App {
      * Task for : Mohamed Yehia
      * send message to the current opened chat
      */
-    void sendMessage(/* Your parameters here */) {
+        void sendMessage(int currentUserId,String msg,int id)throws SQLException {//today.................
+        {
+           //I did condition because if I was working block for this person(chat) I would unblock then send message
+            query="select isblocked from userjoinchat where chatid=?";
+            preQuery = con.prepareStatement(query);
+            preQuery.setInt(1,id);
+            result = preQuery.executeQuery();
+            if(result.equals(1)){
+                query="update userjoinchat set isblocked=0 where chatId=?";
+                preQuery = con.prepareStatement(query);
+                preQuery.setInt(1,id);
+                System.out.println("you have unblocked this contact");
+            }
+
+           query="insert into message(senderid,chatid,messageText,seenStatus) values(?,?,?,default)";
+            preQuery = con.prepareStatement(query);
+            preQuery.setInt(1,currentUserId);
+            preQuery.setInt(2,id);
+            preQuery.setString(3,msg);
 
     }
 
@@ -315,8 +333,11 @@ public class App {
      * Task for : Mohamed Yehia
      * EDIT : add blocked user to database contact mohamed walid
      */
-    void blockUser(/*Your parameters here */) {
-
+     void blockUser(int chatId)throws SQLException {
+        query="update userjoinchat set isblocked=1 where chatId=?";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1,chatId);
+        System.out.println("You have blocked this contact");
     }
 
     /**
