@@ -8,10 +8,16 @@
  */
 package chatPack;
 
+import jdk.jshell.execution.LoaderDelegate;
+
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.concurrent.atomic.LongAccumulator;
 
 public class App {
     Connection con;
@@ -117,8 +123,13 @@ public class App {
      * Task for: bavley,,,
      * add new connection to the user list
      */
-    void addConnection() {
-
+    void addConnection(int currentUserId, int friendId, String friendName) throws SQLException{
+        query = "insert into userConnection values(?, ?, ?)";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1, currentUserId);
+        preQuery.setInt(2, friendId);
+        preQuery.setString(3, friendName);
+        preQuery.executeUpdate();
     }
 
     /**
@@ -126,8 +137,21 @@ public class App {
      * checkGarbage functionality is to search for any data that it's existence is related to time or date
      * eg (all user stories) and delete it from database before the user open his UI
      */
-    void checkGarbage(/*Your parameters here */) {
-
+    void checkGarbageStory() throws SQLException{
+        query = "select * from story order by storyDateUploaded asc, storyTimeUploaded asc";
+        preQuery = con.prepareStatement(query);
+        result = preQuery.executeQuery();
+        while (result.next()){
+        Story st = new Story(result.getInt(1),result.getString(4), result.getObject(3, LocalTime.class), result.getObject(2, LocalDate.class));
+            if (!st.getStoryUploadedDate().equals(LocalDate.now())){
+                query = "delete from story where storyUploaderId = ? and storyDateUploaded = ? and storyTimeUploaded = ?";
+                preQuery = con.prepareStatement(query);
+                preQuery.setInt(1, result.getInt(1));
+                preQuery.setDate(2, result.getDate(2));
+                preQuery.setTime(3, result.getTime(3));
+                preQuery.executeUpdate();
+            }
+        }
     }
 
     /**
