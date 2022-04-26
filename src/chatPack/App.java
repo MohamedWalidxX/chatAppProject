@@ -224,7 +224,7 @@ public class App {
         result = preQuery.executeQuery();
         result.next();
         ChatRoom chat = new ChatRoom(chatId, result.getString(2));
-        query = "select userId, chatId, lastChatOpen from userJoinChat where chatId = ?";
+        query = "select userId, chatId, lastChatOpen, isBlocked from userJoinChat where chatId = ?";
         preQuery = con.prepareStatement(query);
         preQuery.setInt(1, chatId);
         result = preQuery.executeQuery();
@@ -232,18 +232,24 @@ public class App {
         System.out.println("\t\t" + chat.getName() + "\n___________________________"+  "\nGroup Members: \n" +
                 "___________________________");
         while (result.next()) {
+//            if (result.getBoolean(4))
+//                continue;
             query = "select friendName from userConnection where userId = ? and friendId = ?";
             preQuery = con.prepareStatement(query);
+            String lastChatOpen = result.getString(3);
             if (currentUserId == result.getInt(1)) {
                 chat.getUserList().add(returnUser(result.getInt(1)));
-                System.out.println("YOU " + result.getString(3) + "\n");
+                System.out.println("YOU");
+                if (lastChatOpen == null)
+                    System.out.println("Not opened Yet" + "\n");
+                else
+                    System.out.println(result.getString(3) + "\n");
                 continue;
             }
             preQuery.setInt(1, currentUserId);
             preQuery.setInt(2, result.getInt(1));
             ResultSet userConnectionRelation = preQuery.executeQuery();
             //Handle the null
-            String lastChatOpen = result.getString(3);
             if (userConnectionRelation.next()) {
                 u = returnUser(result.getInt(1));
                 if (userConnectionRelation.getString(1) != null)
@@ -356,7 +362,7 @@ public class App {
      * remove yourself or any user from the chat group
      */
     void removeUserFromGroup(User user) throws SQLException {
-        query = "delete from userJoinChat where userId = ? and chatId = ?";
+        query = "update userJoinChat set isBlocked = true where userId = ? and chatId = ?";
         preQuery = con.prepareStatement(query);
         preQuery.setInt(1, user.getId());
         preQuery.setInt(2, user.getCurrentChatId());
