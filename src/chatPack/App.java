@@ -59,7 +59,17 @@ public class App {
      * Task for : Mohamed Yehia
      * this function is taking a user information then compare it with the database to make the user login
      */
-    void login(/*Your parameters here */) {
+  void login(String username,String password)throws SQLException {
+        query="select username,password from user ";
+        preQuery=con.prepareStatement(query);
+        result=preQuery.executeQuery();
+        while(result.next())
+        {
+          if(result.getString("username").equals(username)&&result.getString("password").equals(password))
+              System.out.println("done");
+          else
+              System.out.println("this account not found");
+       }
 
     }
 
