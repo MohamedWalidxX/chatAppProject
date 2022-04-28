@@ -9,7 +9,6 @@ public class Main {
     public static void main(String[] args) throws SQLException {
         App app = new App();
         User u = new User(13, "MohamedAhmed", "01014891962", "abcd", "hello", true);
-        u.setCurrentChatId(3);
-        app.showChatInfo(3, 13);
+        app.searchForConnectionByName(11, "B");
     }
 }

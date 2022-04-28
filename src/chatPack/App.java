@@ -1,11 +1,3 @@
-/**
- * IMPORTANT RULES FOR DEVELOPER :
- * 1. you have the right to change your assigned function components eg (inputs - return type - function body)
- * as long as it reaches the goal.
- * 2. you don't have the right to change your friend function components directly you have to ask him to change it by himself.
- * 3. you have to be careful when you use SQL statement that the data still
- * consistent eg (check the select syntax in the mysql ide first then copy it to INTELLIJ)
- */
 package chatPack;
 
 import jdk.jshell.execution.LoaderDelegate;
@@ -14,9 +6,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.*;
 import java.util.concurrent.atomic.LongAccumulator;
 
 public class App {
@@ -130,6 +120,11 @@ public class App {
         preQuery.setInt(2, friendId);
         preQuery.setString(3, friendName);
         preQuery.executeUpdate();
+        // create a chat room between both of them and call it a const name 'private'
+        // note that the group name is not a primary key in the database
+        query = "insert into chatRoom (name) values ('private')";
+        preQuery = con.prepareStatement(query);
+        preQuery.executeUpdate();
     }
 
     /**
@@ -159,8 +154,50 @@ public class App {
      * For each user check his connection list and expand all his connections as a 2 members chat list
      * and for each chat the name of it and the last message was sent
      */
-    void expandConnectionChats(/*Your parameters here */) {
-
+    void expandConnectionChats(int userId) throws SQLException{
+        // for a specific user get all rooms which he participated in
+        // then save its information in an ArrayList
+        query = "select chatId from userJoinChat where userId = ?";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1, userId);
+        result = preQuery.executeQuery();
+        ArrayList<ChatRoom> chatRooms = new ArrayList<ChatRoom>();
+        while (result.next()){
+            query = "select id, name from chatRoom where id = ?";
+            preQuery = con.prepareStatement(query);
+            preQuery.setInt(1, result.getInt(1));
+            ResultSet tmpResult = preQuery.executeQuery();
+            tmpResult.next();
+            chatRooms.add(new ChatRoom(tmpResult.getInt(1), tmpResult.getString(2)));
+        }
+        // the queue save all the distinct chat IDs that the user has participated in
+        Queue<ChatRoom> firstOccurredChat = new LinkedList<ChatRoom>();
+        // make a query to get all the messages ordered from the new to the old
+        query = "select chatId, messageText, time from message order by date desc , time desc";
+        preQuery = con.prepareStatement(query);
+        result = preQuery.executeQuery();
+        while (result.next()){
+            // save all the occurred chat that our user participated in by a queue
+            int tmpChatIdSave = result.getInt(1);
+            for (int i = 0; i < chatRooms.size(); i++){
+                // to save some time without calling the .get(i) method many times we assigned the reference to an object of Chatroom
+                // then we do all the operations with it as it references to the original object
+                ChatRoom currentChat = chatRooms.get(i);
+                if (!currentChat.flag && currentChat.getId() == tmpChatIdSave){
+                    currentChat.flag = true;
+                    currentChat.setLastMessageSent(result.getString(2));
+                    firstOccurredChat.add(currentChat);
+                    break;
+                }
+            }
+        }
+        // the next loop is for checking if any chats has not been visited yet (its flag not set with true)
+        // then add it to the queue
+        for (int i = 0; i < chatRooms.size(); i++)
+            if (!chatRooms.get(i).flag)
+                firstOccurredChat.add(chatRooms.get(i));
+        for (ChatRoom ch : chatRooms)
+            System.out.println(ch.getName() + "\n" + ch.getLastMessageSent() + "\n_______________________");
     }
 
     /**
@@ -174,6 +211,10 @@ public class App {
         return result.getInt("id");
     }
     void createGroup(String groupName,ArrayList<User> list)throws SQLException {
+        if (groupName == "private"){
+            System.out.println("The group name is already used");
+            return;
+        }
         query="insert into chatroom(name) values(?)";
         preQuery = con.prepareStatement(query);
         preQuery.setString(1,groupName);
@@ -222,6 +263,9 @@ public class App {
         preQuery = con.prepareStatement(query);
         preQuery.setInt(1, chatId);
         result = preQuery.executeQuery();
+        while (result.next()){
+            result.getString(3);
+        }
         result.next();
         ChatRoom chat = new ChatRoom(chatId, result.getString(2));
         query = "select userId, chatId, lastChatOpen, isBlocked from userJoinChat where chatId = ?";
@@ -324,6 +368,7 @@ public class App {
      * send message to the current opened chat
      */
     void sendMessage(/* Your parameters here */) {
+
 
     }
 
@@ -445,7 +490,7 @@ public class App {
             preQuery.setInt(1, result.getInt(2));
             ResultSet tmpResult = preQuery.executeQuery();
             tmpResult.next();
-            findUser.put(result.getInt(1), new User(tmpResult.getInt(1), result.getString(3), tmpResult.getString(3), tmpResult.getString(4),
+            findUser.put(tmpResult.getInt(1), new User(tmpResult.getInt(1), result.getString(3), tmpResult.getString(3), tmpResult.getString(4),
                     tmpResult.getString(5), tmpResult.getBoolean(6)));
         }
         Enumeration<Integer> e = findUser.keys();
