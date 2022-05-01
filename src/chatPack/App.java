@@ -368,7 +368,24 @@ public class App {
      * send message to the current opened chat
      */
     void sendMessage(/* Your parameters here */) {
+    void sendMessage(int currentUserId,String msg,int id)throws SQLException {//today.................
+        {
+           //I did condition because if I was working block for this person(chat) I would unblock then send message
+            query="select isblocked from userjoinchat where chatid=?";
+            preQuery = con.prepareStatement(query);
+            preQuery.setInt(1,id);
+            result = preQuery.executeQuery();
+            if(result.equals(1)){
+                System.out.println("You cannot send message to this group because you are on longer a participant in it");
+            }
 
+           query="insert into message(senderid,chatid,messageText,seenStatus) values(?,?,?,default)";
+            preQuery = con.prepareStatement(query);
+            preQuery.setInt(1,currentUserId);
+            preQuery.setInt(2,id);
+            preQuery.setString(3,msg);
+
+    }
 
     }
 
