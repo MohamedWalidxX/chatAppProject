@@ -258,8 +258,11 @@ public class App {
         for (int i = 0; i < chatRooms.size(); i++)
             if (!chatRooms.get(i).flag)
                 firstOccurredChat.add(chatRooms.get(i));
-        for (ChatRoom ch : chatRooms)
-            System.out.println(ch.getName() + "\n" + ch.getLastMessageSent() + "\n_______________________");
+        while (!firstOccurredChat.isEmpty()){
+            System.out.println("______________________\n" + firstOccurredChat.peek().getName() + "\n" + firstOccurredChat.peek().getLastMessageSent() +
+                    "\n _______________________\n");
+            firstOccurredChat.poll();
+        }
     }
 
     /**
@@ -390,7 +393,6 @@ public class App {
                 }
 
             }
-        System.out.println("___________________________");
         }
 
     /**

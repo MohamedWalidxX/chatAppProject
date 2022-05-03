@@ -10,6 +10,7 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
         App app = new App();
-        app.expandMessages(4, 2);
+        app.expandConnectionChats(1);
+
     }
 }
