@@ -461,10 +461,15 @@ public class App {
 
     /**
      * Task for : Mohamed Walid
-     * UNDO your sent messages
+     * UNDO your own sent messages
      */
-    void deleteMessage(/*Your parameters here */) {
-
+    void deleteMessage(int userId, int currentUserOpenedChatId, int messageId) throws SQLException{
+        query = "delete from message where userId = ? and chatId = ? and id = ?";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1, userId);
+        preQuery.setInt(2, currentUserOpenedChatId);
+        preQuery.setInt(3, messageId);
+        preQuery.executeUpdate();
     }
 
     /**
