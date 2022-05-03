@@ -3,12 +3,13 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class Main {
 
     public static void main(String[] args) throws SQLException {
         App app = new App();
-        User u = new User(13, "MohamedAhmed", "01014891962", "abcd", "hello", true);
-        app.searchForConnectionByName(11, "B");
+        app.expandMessages(4, 2);
     }
 }
