@@ -1,4 +1,9 @@
 package chatPack;
+import javax.swing.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -145,6 +150,33 @@ public class App {
         if (countChecker() == 1)
             return 2;
         return 0;
+    }
+
+    /**
+     * after clicking some button in GUi it will make the user choose from his images which one to upload
+     * for his profile or story
+     * @throws SQLException
+     * @throws FileNotFoundException
+     */
+    void uploadImage(int userId) throws SQLException, IOException {
+        JFileChooser jfc = new JFileChooser();
+        jfc.showOpenDialog(null);
+        File file = jfc.getSelectedFile();
+        FileInputStream fis=  new FileInputStream(file);
+        query = "insert into image (image) values(?)";
+        preQuery = con.prepareStatement(query);
+        preQuery.setBinaryStream(1, fis, fis.available());
+        preQuery.executeUpdate();
+        //get last inserted data using the primary key sorting methodology
+        query = "select id from image order by id desc limit 1";
+        preQuery = con.prepareStatement(query);
+        result = preQuery.executeQuery();
+        result.next();
+        int userImageId = result.getInt(1);
+        query = "update table user set userImageId = ? where id = ?";
+        preQuery = con.prepareStatement(query);
+        preQuery.setInt(1, userId);
+        preQuery.executeUpdate();
     }
 
     /**

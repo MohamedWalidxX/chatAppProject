@@ -1,10 +1,14 @@
 package chatPack;
+
+import java.awt.image.BufferedImage;
+
 // Task for : Mohamed Walid
 public class User {
     private final int id;
     private String username, phoneNumber, password, profileDesc;
     private boolean profileVisibility;
     private int currentChatId;
+    private int userImageId;
     public User(int id, String username, String phoneNumber, String password, String profileDesc, boolean profileVisiblilty) {
         this.id = id;
         this.username = username;
@@ -42,6 +46,10 @@ public class User {
         return currentChatId;
     }
 
+    public int getUserImageId() {
+        return userImageId;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -66,4 +74,7 @@ public class User {
         this.currentChatId = currentChatId;
     }
 
+    public void setUserImageId(int userImageId) {
+        this.userImageId = userImageId;
+    }
 }
