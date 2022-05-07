@@ -7,12 +7,14 @@ public class ChatRoom {
     private final int id;
     private String name;
     private ArrayList<User> userList;
+    private ArrayList<Message> messagesList;
     private String lastMessageSent;
     public boolean flag = false;
     public ChatRoom(int id, String name) {
         this.id = id;
         this.name = name;
         userList = new ArrayList<User>();
+        messagesList = new ArrayList<Message>();
     }
 
     public int getId() {
