@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS `userconnection`;
 CREATE TABLE `userconnection` (
   `userId` int NOT NULL,
   `friendId` int NOT NULL,
+  `friendName` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`userId`,`friendId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -35,6 +36,7 @@ CREATE TABLE `userconnection` (
 
 LOCK TABLES `userconnection` WRITE;
 /*!40000 ALTER TABLE `userconnection` DISABLE KEYS */;
+INSERT INTO `userconnection` VALUES (1,2,'MrMody'),(1,3,'MeetingYehiawi'),(2,1,NULL),(2,3,'MrYehiaMyFriendooo'),(3,1,NULL),(3,2,NULL);
 /*!40000 ALTER TABLE `userconnection` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -47,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-18  7:28:52
+-- Dump completed on 2022-05-08 19:35:28

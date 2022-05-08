@@ -23,10 +23,12 @@ DROP TABLE IF EXISTS `story`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `story` (
-  `text` varchar(300) DEFAULT NULL,
-  `time` time NOT NULL DEFAULT (cast(curtime() as time)),
   `storyUploaderId` int NOT NULL,
-  PRIMARY KEY (`time`,`storyUploaderId`)
+  `storyDateUploaded` date NOT NULL DEFAULT (curdate()),
+  `storyTimeUploaded` time NOT NULL DEFAULT (curtime()),
+  `Text` varchar(250) NOT NULL,
+  PRIMARY KEY (`storyUploaderId`,`storyDateUploaded`,`storyTimeUploaded`),
+  CONSTRAINT `story_ibfk_1` FOREIGN KEY (`storyUploaderId`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -48,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-18  7:28:51
+-- Dump completed on 2022-05-08 19:35:29
