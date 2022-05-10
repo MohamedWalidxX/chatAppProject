@@ -697,7 +697,13 @@ public class App {
         // save last date and time the user opened current chat
         Date userLastDateOpened = result.getDate(1);
         Time userLastTimeOpened = result.getTime(2);
-        if (userLastTimeOpened)
+        if (userLastDateOpened == null){
+            query = "select dateOfGroupCreation from chatroom where id = ?";
+            preQuery = con.prepareStatement(query);
+            preQuery.setInt(1, chatId);
+            ResultSet tmpResult = preQuery.executeQuery();
+            
+        }
         // counter for the return value of method
         int unreadMessageCounter = 0;
         // get all messages that is greater than or equals to the
