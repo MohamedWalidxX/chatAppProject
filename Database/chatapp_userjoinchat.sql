@@ -25,8 +25,9 @@ DROP TABLE IF EXISTS `userjoinchat`;
 CREATE TABLE `userjoinchat` (
   `chatId` int NOT NULL,
   `userId` int NOT NULL,
-  `lastChatOpen` datetime DEFAULT NULL,
   `isBlocked` tinyint(1) DEFAULT '0',
+  `lastDateChatOpened` date DEFAULT NULL,
+  `lastTimeChatOpened` time DEFAULT NULL,
   PRIMARY KEY (`chatId`,`userId`),
   KEY `fk_chatId_userId2` (`userId`),
   CONSTRAINT `fk_chatId_userId1` FOREIGN KEY (`chatId`) REFERENCES `chatroom` (`id`),
@@ -40,7 +41,7 @@ CREATE TABLE `userjoinchat` (
 
 LOCK TABLES `userjoinchat` WRITE;
 /*!40000 ALTER TABLE `userjoinchat` DISABLE KEYS */;
-INSERT INTO `userjoinchat` VALUES (1,1,NULL,0),(1,2,NULL,0),(2,1,NULL,0),(2,3,NULL,0),(3,2,NULL,0),(3,3,NULL,0),(4,1,'2022-05-03 10:21:47',0),(4,2,'2022-05-03 10:21:47',0),(4,3,'2022-05-01 17:52:11',0);
+INSERT INTO `userjoinchat` VALUES (1,1,0,NULL,NULL),(1,2,0,NULL,NULL),(2,1,1,'2022-05-10','09:00:00'),(2,3,0,NULL,NULL),(3,2,0,NULL,NULL),(3,3,0,NULL,NULL),(4,1,0,NULL,NULL),(4,2,0,NULL,NULL),(4,3,0,NULL,NULL);
 /*!40000 ALTER TABLE `userjoinchat` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-08 19:35:28
+-- Dump completed on 2022-05-10  9:02:55
