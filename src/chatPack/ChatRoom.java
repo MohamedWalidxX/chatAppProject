@@ -2,19 +2,23 @@ package chatPack;
 
 import java.util.ArrayList;
 
-// Task for ; Mohamed Mamdouh
 public class ChatRoom {
     private final int id;
     private String name;
     private ArrayList<User> userList;
-    private String lastMessageSent;
+    private Message lastMessageSent;
+    private String chatroomImageLink;
     public boolean flag = false;
     public ChatRoom(int id, String name) {
         this.id = id;
         this.name = name;
         userList = new ArrayList<User>();
     }
-
+    public ChatRoom(int id, String name, String chatroomImageLink){
+        this.id = id;
+        this.name=  name;
+        this.chatroomImageLink = chatroomImageLink;
+    }
     public int getId() {
         return id;
     }
@@ -35,11 +39,11 @@ public class ChatRoom {
         this.userList = userList;
     }
 
-    public String getLastMessageSent() {
+    public Message getLastMessageSent() {
         return lastMessageSent;
     }
 
-    public void setLastMessageSent(String lastMessageSent) {
+    public void setLastMessageSent(Message lastMessageSent) {
         this.lastMessageSent = lastMessageSent;
     }
 }

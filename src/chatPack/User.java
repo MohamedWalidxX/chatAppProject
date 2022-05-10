@@ -5,10 +5,11 @@ import java.awt.image.BufferedImage;
 // Task for : Mohamed Walid
 public class User {
     private final int id;
-    private String username, phoneNumber, password, profileDesc;
+    private String username, phoneNumber, password, profileDesc = "default";
     private boolean profileVisibility;
     private int currentChatId;
-    private int userImageId;
+    private String userImageLink;
+    private String lastDateOpened,lastTimeOpened;
     public User(int id, String username, String phoneNumber, String password, String profileDesc, boolean profileVisiblilty) {
         this.id = id;
         this.username = username;
@@ -17,7 +18,23 @@ public class User {
         this.profileDesc = profileDesc;
         this.profileVisibility = profileVisiblilty;
     }
+    public User(int id, String username, String password){
+        this.id = id;
+        this.username = username;
+        this.password = password;
 
+    }
+    public User(int id, String username, String password, String phoneNumber){
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+    }
+    public User(int id, String date, String time, int ff){
+        this.id = id;
+        this.lastDateOpened = date;
+        this.lastTimeOpened = time;
+    }
     public int getId() {
         return id;
     }
@@ -46,8 +63,8 @@ public class User {
         return currentChatId;
     }
 
-    public int getUserImageId() {
-        return userImageId;
+    public String getUserImageLink() {
+        return userImageLink;
     }
 
     public void setUsername(String username) {
@@ -74,7 +91,7 @@ public class User {
         this.currentChatId = currentChatId;
     }
 
-    public void setUserImageId(int userImageId) {
-        this.userImageId = userImageId;
+    public void setUserImageLink(String userImageLink) {
+        this.userImageLink = userImageLink;
     }
 }

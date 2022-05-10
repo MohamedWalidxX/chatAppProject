@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS `chatroom`;
 CREATE TABLE `chatroom` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
+  `dateOfGroupCreation` date DEFAULT (curdate()),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -35,7 +36,7 @@ CREATE TABLE `chatroom` (
 
 LOCK TABLES `chatroom` WRITE;
 /*!40000 ALTER TABLE `chatroom` DISABLE KEYS */;
-INSERT INTO `chatroom` VALUES (1,'private'),(2,'private'),(3,'private'),(4,'TestingGroupFirst');
+INSERT INTO `chatroom` VALUES (1,'private','2022-05-10'),(2,'private','2022-05-10'),(3,'private','2022-05-10'),(4,'TestingGroupFirst','2022-05-10');
 /*!40000 ALTER TABLE `chatroom` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -48,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-10  9:02:55
+-- Dump completed on 2022-05-10 11:00:54

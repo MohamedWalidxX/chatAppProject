@@ -35,7 +35,7 @@ CREATE TABLE `message` (
   KEY `fk_chatId` (`chatId`),
   CONSTRAINT `fk_chatId` FOREIGN KEY (`chatId`) REFERENCES `chatroom` (`id`),
   CONSTRAINT `fk_senderId` FOREIGN KEY (`senderId`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `message` (
 
 LOCK TABLES `message` WRITE;
 /*!40000 ALTER TABLE `message` DISABLE KEYS */;
-INSERT INTO `message` VALUES (1,1,4,'Text MIC TEST TEST','2022-05-03','10:21:47',0),(2,2,4,'Hello guys!!','2022-05-03','10:21:47',0),(3,2,4,'I was solving some problems on CF BTW :D','2022-05-03','10:21:47',0),(4,1,4,'IK NERD HEHE XDDD','2022-05-03','10:30:15',0),(5,1,4,'new day no news','2022-05-04','10:31:38',0),(6,1,4,'IK NERD HEHE XDDD','2022-05-03','10:31:44',0),(7,2,4,'Yehia not here yet :\'( ','2022-05-04','10:34:00',0),(8,1,4,'IK NERD HEHE XDDD','2022-05-03','10:34:04',0),(9,1,1,'This is private between me and you friendo :D ','2022-05-03','10:53:32',0),(10,2,1,'YES, my friend i agree with you :D','2022-05-03','10:55:12',0);
+INSERT INTO `message` VALUES (1,1,4,'Text MIC TEST TEST','2022-05-03','10:21:47',0),(2,2,4,'Hello guys!!','2022-05-03','10:21:47',0),(3,2,4,'I was solving some problems on CF BTW :D','2022-05-03','10:21:47',0),(4,1,4,'IK NERD HEHE XDDD','2022-05-03','10:30:15',0),(5,1,4,'new day no news','2022-05-04','10:31:38',0),(6,1,4,'IK NERD HEHE XDDD','2022-05-03','10:31:44',0),(7,2,4,'Yehia not here yet :\'( ','2022-05-04','10:34:00',0),(8,1,4,'IK NERD HEHE XDDD','2022-05-03','10:34:04',0),(9,1,1,'This is private between me and you friendo :D ','2022-05-03','10:53:32',0),(10,2,1,'YES, my friend i agree with you :D','2022-05-03','10:55:12',0),(11,1,4,'new day new hope :D','2022-05-10','10:45:30',0),(12,2,4,'YES YES YES YES YES YES YES YES YES YES YES YSEYESSEYEY','2022-05-10','10:46:28',0),(13,2,4,'abcbabababab','2022-05-10','10:46:38',0);
 /*!40000 ALTER TABLE `message` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-10  9:02:56
+-- Dump completed on 2022-05-10 11:00:54

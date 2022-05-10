@@ -1,7 +1,7 @@
 package chatPack;
 // Task for:  Mohamed Walid
 public class Message {
-private final int id, senderId, chatId;
+private  int id, senderId, chatId;
 private final String messageText;
 private String date, time;
 private boolean seenStatus;
@@ -15,7 +15,11 @@ private boolean seenStatus;
         this.time = time;
         this.seenStatus = seenStatus;
     }
-
+    public Message(int senderId, String messageText, String time){
+        this.senderId = senderId;
+        this.messageText = messageText;
+        this.time = time;
+    }
     public int getId() {
         return id;
     }
