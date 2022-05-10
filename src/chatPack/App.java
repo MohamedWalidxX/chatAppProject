@@ -698,11 +698,12 @@ public class App {
         Date userLastDateOpened = result.getDate(1);
         Time userLastTimeOpened = result.getTime(2);
         if (userLastDateOpened == null){
-            query = "select dateOfGroupCreation from chatroom where id = ?";
+            query = "select dateOfGroupCreation, timeOfGroupCreation from chatroom where id = ?";
             preQuery = con.prepareStatement(query);
             preQuery.setInt(1, chatId);
             ResultSet tmpResult = preQuery.executeQuery();
-            
+            userLastDateOpened = tmpResult.getDate(1);
+            userLastTimeOpened = tmpResult.getTime(2);
         }
         // counter for the return value of method
         int unreadMessageCounter = 0;
